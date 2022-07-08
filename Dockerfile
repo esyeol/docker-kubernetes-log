@@ -2,7 +2,7 @@
 FROM ubuntu:20.04
 MAINTAINER eomssy <co6747@naver.com> 
 
-#auto debian setting 
+#auto debian ubuntu setting
 ARG DEBIAN_FRONTEND=noninteractive
 
 # php ver 7.4.3 
