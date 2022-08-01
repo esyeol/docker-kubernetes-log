@@ -14,6 +14,12 @@ RUN apt-get install -y php
 
 #connect php & mysql 
 RUN apt-get install -y php-mysql
+RUN apt-get update
+RUN apt install php-xml php-gd php-mbstring php-zip
+# RUN apt-get update && \
+#     apt-get install -y \
+#         zlib1g-dev
+# RUN docker-php-ext-install zip
 
 EXPOSE 80 
 
