@@ -1,6 +1,7 @@
 ## Basic Container Practice  
 
 
+#### Docker Image & Container Basic
 
 ```bash
 $ docker build . # 작성한 Koa Application 의 Dockerfile을 찾아서 이미지를 생성. 
@@ -36,8 +37,47 @@ $ docker stop [docker container id] # container stop
  => exporting to image                                                                                0.0s
  => => exporting layers                                                                               0.0s
  => => writing image sha256:ec5199e2f113a3b2104bf2a3e6c8387ae519f1ede91c70923d4da56bb1cfb227          0.0s
+```
+</br>
+</br>
 
+#### Basic Dockerfile 최적화
+
+
+> 최적화 이전 
+``` Dockerfile
+FROM node
+
+WORKDIR /app
+
+COPY . /app
+
+RUN npm install
+
+EXPOSE 80
+
+CMD ["node", "server.js"]
 ```
 
 
+> 최적화 후 
+``` Dockerfile
+FROM node
+
+WORKDIR /app
+
+COPY package.json /app
+
+RUN npm install
+
+COPY . /app
+
+EXPOSE 80
+
+CMD ["node", "server.js"]
+```
+
+- 2가지 Dockerfile을 살펴보면 중간에 COPY package.json /app 이라는 구문이 추가된 것을 확인 할 수 있음 
+- Dockerfile은 각 명령어의 Layer를 캐싱함. 즉, 각 명령어가 실행된 후 결과를 이미지로 저장하고, 다음 빌드에 동일한 명령어가 실행되면 캐시된 결과를 재사용함(위 정리내용 참고)
+- 최적화후 Dockerfile은 package.json 파일을 먼저 복사하고 이후에, npm install로 종속성을 설치함. 이후 나머지 파일을 복사하기 때문에 의존성 설치를 효율적으로 캐싱할 수 있음. 실제로 빌드 결과를 비교했을 때, 최적화된 도커 이미지의 빌드 속도가 훨씬더 빠른것을 확인 할 수 있음.
 
